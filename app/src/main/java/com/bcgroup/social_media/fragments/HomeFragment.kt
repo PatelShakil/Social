@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -27,8 +29,12 @@ import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.FragmentHomeBinding
 import com.bcgroup.social_media.adapters.PostAdapter
+import com.bcgroup.social_media.adapters.SendPostAdapter
 import com.bcgroup.social_media.models.PostModel
+import com.bcgroup.social_media.models.UserModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
@@ -146,6 +152,32 @@ class HomeFragment : Fragment() {
                     holder.binding.userPostVid.visibility = View.GONE
                     holder.binding.userPostVidThumb.visibility = View.GONE
                     holder.binding.userPost.setImageBitmap(Constants().decodeImage(post.post_url))
+                }
+                holder.binding.postShare.setOnClickListener {
+                    var sheet : BottomSheetDialog
+                    sheet = BottomSheetDialog(context!!)
+                    sheet.setContentView(R.layout.send_layout)
+                    var rv = sheet.findViewById<RecyclerView>(R.id.send_users_rv)
+                    sheet.findViewById<TextView>(R.id.send_post_caption)?.text = post.post_caption
+                    var users_list = ArrayList<UserModel>()
+                    db.collection(Constants().KEY_COLLECTION_USERS)
+                        .whereNotEqualTo("uid", auth.uid.toString())
+                        .get()
+                        .addOnSuccessListener {
+                            if (!it.isEmpty) {
+                                for (i in it.documents) {
+                                    var user: UserModel = i.toObject(UserModel::class.java)!!
+                                    user.profile_pic = i["profile_pic"].toString()
+                                    users_list.add(user)
+                                }
+                            }
+                            if (users_list.size > 0) {
+                                var users_adapter = SendPostAdapter(users_list,requireContext(),post.post_id)
+                                rv?.adapter = users_adapter
+                                users_adapter.notifyDataSetChanged()
+                            }
+                        }
+                    sheet.show()
                 }
                 db.collection(Constants().KEY_COLLECTION_USERS)
                     .document(post.post_author)

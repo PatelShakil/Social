@@ -1,5 +1,6 @@
 package com.bcgroup.social_media.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +12,20 @@ import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ReceiverSampleMessageBinding
 import com.bcgroup.databinding.SenderSampleMessageBinding
 import com.bcgroup.social_media.models.ChatModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
     var msglist:List<ChatModel>
     var senderid:String
+    var context : Context
 
-    constructor(msglist: List<ChatModel>, senderid: String) {
+    constructor(msglist: List<ChatModel>, senderid: String,context: Context) {
         this.msglist = msglist
         this.senderid = senderid
+        this.context = context
     }
 
 
@@ -36,9 +43,50 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
         init {
             binding = SenderSampleMessageBinding.bind(itemView)
         }
-        fun setData(msg:ChatModel){
-            binding.senderTv.text = msg.message
-            binding.sendMessageDatetime.text = msg.datetime
+        fun setData(msg:ChatModel,context : Context) {
+            if (msg.message == "false") {
+                binding.senderTv.visibility = View.GONE
+                binding.senderPostCard.visibility = View.VISIBLE
+                FirebaseDatabase.getInstance().reference
+                    .child("social_media")
+                    .child("posts")
+                    .child(msg.post)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                var postImg = snapshot.child("post_url").getValue().toString()
+                                binding.senderPostIv.setImageBitmap(Constants().decodeImage(postImg))
+                                FirebaseFirestore.getInstance()
+                                    .collection(Constants().KEY_COLLECTION_USERS)
+                                    .document(snapshot.child("post_author").getValue().toString())
+                                    .addSnapshotListener { value, error ->
+                                        if (error != null)
+                                            return@addSnapshotListener
+                                        if (value != null) {
+                                            if (value.exists()) {
+                                                if (context != null) {
+                                                    Glide.with(context)
+                                                        .load(
+                                                            value.getString("profile_pic")
+                                                                .toString()
+                                                        )
+                                                        .placeholder(R.drawable.profile_icon)
+                                                        .into(binding.senderPostProfile)
+                                                }
+                                                binding.senderPostAuthor.text =
+                                                    value.getString("username").toString()
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+                binding.sendMessageDatetime.text = msg.datetime
+            } else
+                binding.senderTv.text = msg.message
+
         }
 
     }
@@ -47,9 +95,43 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
         init {
             binding = ReceiverSampleMessageBinding.bind(itemView)
         }
-        fun setData(msg: ChatModel){
-        binding.receiverTv.text = msg.message
-            binding.receiveMessageDatetime.text = msg.datetime
+        fun setData(msg: ChatModel,context: Context){
+            if (msg.message == "false"){
+                binding.receiverTv.visibility = View.GONE
+                binding.receiverPostCard.visibility = View.VISIBLE
+                FirebaseDatabase.getInstance().reference
+                    .child("social_media")
+                    .child("posts")
+                    .child(msg.post)
+                    .addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()){
+                                var postImg = snapshot.child("post_url").getValue().toString()
+                                binding.receiverPostIv.setImageBitmap(Constants().decodeImage(postImg))
+                                FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
+                                    .document(snapshot.child("post_author").getValue().toString())
+                                    .addSnapshotListener { value, error ->
+                                        if(error != null)
+                                            return@addSnapshotListener
+                                        if(value != null){
+                                            if (value.exists()){
+                                                if (context != null){
+                                                    Glide.with(context)
+                                                        .load(value.getString("profile_pic").toString())
+                                                        .placeholder(R.drawable.profile_icon)
+                                                        .into(binding.receiverPostProfile)
+                                                }
+                                                binding.receiverPostAuthor.text = value.getString("username").toString()
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+                binding.receiveMessageDatetime.text = msg.datetime
+            }else
+                binding.receiverTv.text = msg.message
         FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
                 .document(msg.senderid)
                 .get()
@@ -77,9 +159,9 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_SENT)
-            SentViewHolder(holder.itemView).setData(msglist[position])
+            SentViewHolder(holder.itemView).setData(msglist[position],context)
         else
-            ReceiveViewHolder(holder.itemView).setData(msglist[position])
+            ReceiveViewHolder(holder.itemView).setData(msglist[position],context)
     }
 
     override fun getItemCount(): Int {

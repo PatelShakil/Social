@@ -34,11 +34,6 @@ class SocialMediaActivity : BaseActivity() {
                         .replace(R.id.main_container, ProfileFragment(),"profile").addToBackStack("profile").commit()
                 }
             }
-            var flist = supportFragmentManager.fragments
-            for (i in flist) {
-                if (i is ViewUserProfileFragment || i is ChatsFragment || i is EditProfileFragment || i is PostViewFragment)
-                    binding.navigation.visibility = View.GONE
-            }
             true
         }
 

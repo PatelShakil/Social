@@ -47,7 +47,7 @@ class ChatActivity : BaseActivity()  {
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
         msglist = ArrayList()
-        msgAdapter = ChatAdapter(msglist,auth.uid.toString())
+        msgAdapter = ChatAdapter(msglist,auth.uid.toString(),this)
         receiverid = intent.extras?.getString("uid").toString()
         senderInfo()
         binding.receiverProfile.setOnClickListener {
@@ -119,7 +119,11 @@ class ChatActivity : BaseActivity()  {
                     var msg = ChatModel()
                     msg.senderid = i.document.getString(Constants().KEY_SENDER_ID).toString()
                     msg.receiverid = i.document.getString(Constants().KEY_RECEIVER_ID).toString()
-                    msg.message = i.document.getString(Constants().KEY_MESSAGE).toString()
+                    if (i.document.getString(Constants().KEY_MESSAGE).toString() == "false"){
+                        msg.post = i.document.getString("post").toString()
+                        msg.message = "false"
+                    }else
+                        msg.message = i.document.getString(Constants().KEY_MESSAGE).toString()
                     msg.datetime =
                         i.document.getDate(Constants().KEY_TIMESTAMP)?.let { readableDate(it) }
                             .toString()
@@ -131,7 +135,7 @@ class ChatActivity : BaseActivity()  {
             if (count == 0)
                 msgAdapter.notifyDataSetChanged()
             else {
-                msgAdapter = ChatAdapter(msglist, auth.uid.toString())
+                msgAdapter = ChatAdapter(msglist, auth.uid.toString(),this)
                 msgAdapter.notifyItemRangeInserted(msglist.size, msglist.size)
                 binding.messagesRv.smoothScrollToPosition(msglist.size - 1)
                 msgAdapter.notifyDataSetChanged()

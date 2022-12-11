@@ -5,6 +5,48 @@
     android:layout_height="wrap_content"
     android:padding="4dp"
     android:layout_marginTop="8dp">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sender_post_card"
+        app:cardCornerRadius="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:id="@+id/sender_post_iv"
+                android:src="@drawable/image_icon"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/profile_icon"
+                app:layout_constraintBottom_toBottomOf="@id/sender_post_iv"
+                app:layout_constraintStart_toStartOf="@id/sender_post_iv"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="10dp"
+                android:id="@+id/sender_post_profile"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/sender_post_author"
+                android:textColor="@color/white"
+                android:fontFamily="@font/tajawal_medium"
+                android:text="Author"
+                app:layout_constraintStart_toEndOf="@id/sender_post_profile"
+                app:layout_constraintBottom_toBottomOf="@id/sender_post_profile"
+                android:layout_marginBottom="10dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/sender_tv"
         android:layout_width="0dp"
@@ -26,10 +68,9 @@
         android:id="@+id/send_message_datetime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/sender_tv"
-        app:layout_constraintRight_toRightOf="@+id/sender_tv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="12:57"
+        app:layout_constraintTop_toBottomOf="@id/sender_post_card"
         android:textSize="10sp"
         android:fontFamily="@font/tajawal_medium"
         android:layout_marginEnd="5dp"/>

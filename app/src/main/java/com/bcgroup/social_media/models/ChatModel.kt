@@ -12,4 +12,5 @@ class ChatModel {
     lateinit var conversionid:String
     lateinit var conversionname:String
     lateinit var conversionimage:String
+    lateinit var post:String
 }
