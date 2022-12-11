@@ -151,7 +151,8 @@ class ChatActivity : BaseActivity()  {
     }
     private fun updateConversion(message:String){
         var df = db.collection(Constants().KEY_COLLECTION_CONVERSIONS).document(conversionid!!)
-                  df.update(Constants().KEY_LASTMESSAGE,message,Constants().KEY_TIMESTAMP,Date())
+
+        df.update(Constants().KEY_LASTMESSAGE,message,Constants().KEY_TIMESTAMP,Date())
 
     }
     private fun checkConversion(){
