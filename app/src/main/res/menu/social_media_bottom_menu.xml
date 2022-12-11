@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Search"
+        android:id="@+id/social_media_search"
+        android:icon="@drawable/search_icon"/>
+    <item
+    android:title="Home"
+    android:id="@+id/social_media_home"
+    android:icon="@drawable/home_icon"/>
+    <item
+        android:title="Chats"
+        android:id="@+id/social_media_chats"
+        android:icon="@drawable/chats_icon"/>
+    <item
+        android:title="Profile"
+        android:id="@+id/social_media_profile"
+        android:icon="@drawable/person_icon"/>
+</menu>

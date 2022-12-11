@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.media3:media3-exoplayer:1.0.0-alpha03@aar">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/24562f87d8c7a191e0628d641eca66d9/transformed/jetified-media3-exoplayer-1.0.0-alpha03/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/24562f87d8c7a191e0628d641eca66d9/transformed/jetified-media3-exoplayer-1.0.0-alpha03/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/24562f87d8c7a191e0628d641eca66d9/transformed/jetified-media3-exoplayer-1.0.0-alpha03/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/24562f87d8c7a191e0628d641eca66d9/transformed/jetified-media3-exoplayer-1.0.0-alpha03/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.media3/media3-exoplayer/1.0.0-alpha03/a9e91826fd8185d3531dc659302b80e17c4ae032/media3-exoplayer-1.0.0-alpha03-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="130dp"
+    android:layout_height="150dp"
+    android:minHeight="150dp"
+    android:maxWidth="130dp"
+    android:maxHeight="150dp"
+    android:minWidth="130dp"
+    android:scaleType="fitXY"
+    android:id="@+id/post_uploaded"
+    android:src="@drawable/logo"
+    android:layout_margin="2dp">
+</ImageView>
