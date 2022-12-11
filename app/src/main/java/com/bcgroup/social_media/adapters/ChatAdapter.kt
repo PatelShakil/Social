@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ReceiverSampleMessageBinding
 import com.bcgroup.databinding.SenderSampleMessageBinding
 import com.bcgroup.social_media.models.ChatModel

@@ -1,4 +1,4 @@
-package com.bcgroup.account
+package com.bcgroup.classes
 
 import android.app.Application
 import com.google.firebase.database.FirebaseDatabase

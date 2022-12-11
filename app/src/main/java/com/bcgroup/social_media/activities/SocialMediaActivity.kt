@@ -1,11 +1,10 @@
-package com.bcgroup.social_media
+package com.bcgroup.social_media.activities
 
 import android.os.Bundle
 import android.view.View
 import com.bcgroup.R
 import com.bcgroup.databinding.ActivitySocialMediaBinding
 import com.bcgroup.social_media.fragments.*
-import java.util.*
 
 class SocialMediaActivity : BaseActivity() {
     private lateinit var binding: ActivitySocialMediaBinding

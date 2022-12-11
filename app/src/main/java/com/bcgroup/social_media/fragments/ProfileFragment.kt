@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleSocialPostProfileBinding
 import com.bcgroup.social_media.adapters.ProfileTabAdapter
 

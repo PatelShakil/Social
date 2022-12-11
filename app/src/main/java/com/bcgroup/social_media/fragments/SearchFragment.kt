@@ -12,12 +12,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.bcgroup.account.Constants
-import com.bcgroup.account.UserModel
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.FragmentSearchBinding
 import com.bcgroup.social_media.adapters.ChatUsersAdapter
 import com.bcgroup.social_media.adapters.ProfilePostAdapter
 import com.bcgroup.social_media.models.PostModel
+import com.bcgroup.social_media.models.UserModel
 
 class SearchFragment : Fragment() {
     lateinit var binding : FragmentSearchBinding

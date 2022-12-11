@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:animateLayoutChanges="true"
-    tools:context=".social_media.ChatActivity">
+    tools:context=".social_media.activities.ChatActivity">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleConversionUserBinding
-import com.bcgroup.social_media.ChatActivity
+import com.bcgroup.social_media.activities.ChatActivity
 import com.bcgroup.social_media.models.ChatModel
 
 class RecentConversionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>{

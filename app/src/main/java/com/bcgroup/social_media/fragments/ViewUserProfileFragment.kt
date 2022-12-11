@@ -16,8 +16,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
 import com.bcgroup.databinding.FragmentViewUserProfileBinding
-import com.bcgroup.account.Constants
-import com.bcgroup.social_media.ChatActivity
+import com.bcgroup.classes.Constants
+import com.bcgroup.social_media.activities.ChatActivity
 import com.bcgroup.social_media.adapters.ProfilePostAdapter
 import com.bcgroup.social_media.models.PostModel
 import java.util.*
@@ -44,7 +44,7 @@ class ViewUserProfileFragment : Fragment() {
             binding.viewFollowBtn.visibility = View.GONE
             binding.viewMessageBtn.visibility = View.GONE
         }
-        db.collection(com.bcgroup.account.Constants().KEY_COLLECTION_USERS)
+        db.collection(com.bcgroup.classes.Constants().KEY_COLLECTION_USERS)
             .document(user_view)
             .addSnapshotListener { value, error ->
                 if (error != null)

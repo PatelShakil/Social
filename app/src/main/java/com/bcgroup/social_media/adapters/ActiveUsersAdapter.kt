@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
-import com.bcgroup.account.Constants
-import com.bcgroup.account.UserModel
+import com.bcgroup.classes.Constants
+import com.bcgroup.social_media.models.UserModel
 import com.bcgroup.databinding.SampleUserActiveBinding
-import com.bcgroup.social_media.ChatActivity
+import com.bcgroup.social_media.activities.ChatActivity
 
 class ActiveUsersAdapter:RecyclerView.Adapter<ActiveUsersAdapter.ActiveUsersViewHolder> {
     var context: Context
@@ -32,7 +32,7 @@ class ActiveUsersAdapter:RecyclerView.Adapter<ActiveUsersAdapter.ActiveUsersView
                 Glide.with(context.applicationContext!!).load(user.profile_pic).placeholder(R.drawable.profile_icon).into(holder.binding.activeProfile)
                 holder.binding.activeUserName.text = user.name
                 holder.binding.activeProfile.setOnClickListener{
-                    var intent = Intent(context,ChatActivity::class.java)
+                    var intent = Intent(context, ChatActivity::class.java)
                     intent.putExtra("uid",user.uid)
                     context.startActivity(intent)
                 }

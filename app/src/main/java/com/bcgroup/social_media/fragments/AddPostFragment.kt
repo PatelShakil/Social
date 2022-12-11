@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import java.util.*
 import com.bcgroup.social_media.models.PostModel
 

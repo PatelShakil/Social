@@ -1,15 +1,17 @@
-package com.bcgroup.account
+package com.bcgroup.social_media.activities
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ActivityAccountCreationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.bcgroup.social_media.SocialMediaActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -19,6 +21,7 @@ class AccountCreationActivity : AppCompatActivity() {
     private lateinit var database:FirebaseDatabase
     private lateinit var storage: FirebaseStorage
     private lateinit var db:FirebaseFirestore
+    var check = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountCreationBinding.inflate(layoutInflater)
@@ -38,7 +41,7 @@ class AccountCreationActivity : AppCompatActivity() {
         }
 
         if(auth.uid.toString() == auth.currentUser?.uid){
-            startActivity(Intent(this,SocialMediaActivity::class.java))
+            startActivity(Intent(this, SocialMediaActivity::class.java))
         }
         binding.loginAlreadyLoginTv.setOnClickListener {
             binding.loginLayout.visibility = View.GONE
@@ -57,12 +60,43 @@ class AccountCreationActivity : AppCompatActivity() {
                 ac_login(binding.loginEmailEt.text.toString(),binding.loginPasswordEt.text.toString())
             }
         }
+        binding.signupUsernameEt.doOnTextChanged { text, start, before, count ->
+            db.collection(Constants().KEY_COLLECTION_USERS).orderBy("username")
+                .get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        for (i in it.documents) {
+                            if (i.getString("username")?.trim().toString() == binding.signupUsernameEt.text.trim().toString()) {
+                                this.check = true
+                                break
+                            }else
+                                this.check = false
+                        }
+                    }
+                    if (check) {
+                        binding.signupUsernameTvHelper.setTextColor(Color.RED)
+                        binding.signupUsernameTvHelper.visibility = View.VISIBLE
+                        binding.signupUsernameTvHelper.text = "This username is already taken 😒"
+                    }
+                    else {
+                        binding.signupUsernameTvHelper.setTextColor(Color.GREEN)
+                        binding.signupUsernameTvHelper.visibility = View.VISIBLE
+                        binding.signupUsernameTvHelper.text = "You can use it ✔✔✔"
+                    }
+                    if(binding.signupUsernameEt.text.isEmpty()){
+                        binding.signupUsernameTvHelper.visibility = View.GONE
+                    }
+                }
+        }
+        if(binding.signupUsernameEt.text.isEmpty()){
+            binding.signupUsernameTvHelper.visibility = View.GONE
+        }
     }
     private fun ac_login(email:String,password:String){
         auth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener {
                 if (it.isSuccessful){
-                    startActivity(Intent(this,SocialMediaActivity::class.java))
+                    startActivity(Intent(this, SocialMediaActivity::class.java))
                     Toast.makeText(this,"Welcome back to Sastagram",Toast.LENGTH_SHORT).show()
                 }
                 else
@@ -70,19 +104,19 @@ class AccountCreationActivity : AppCompatActivity() {
             }
     }
     private fun ac_signup(username:String,email:String,password:String){
-        var check = false
         db.collection(Constants().KEY_COLLECTION_USERS).orderBy("username")
             .get()
             .addOnSuccessListener {
-                if(!it.isEmpty){
-                    for (i in it.documents){
-                        if (i["username"] != username){
-                            check = true
+                if (!it.isEmpty) {
+                    for (i in it.documents) {
+                        if (i.getString("username")?.trim().toString() == binding.signupUsernameEt.text.trim().toString()) {
+                            this.check = true
                             break
-                        }
+                        }else
+                            this.check = false
                     }
                 }
-                if (check) {
+                if (!check) {
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
@@ -93,7 +127,7 @@ class AccountCreationActivity : AppCompatActivity() {
                                 )
                                 user.put(
                                     Constants().KEY_USERNAME,
-                                    binding.signupUsernameEt.text.trim().toString()
+                                    binding.signupUsernameEt.text.trim().toString().lowercase().replace(" ","_")
                                 )
                                 user.put(
                                     Constants().KEY_EMAIL,
@@ -125,7 +159,7 @@ class AccountCreationActivity : AppCompatActivity() {
                         }
                 }
                 else {
-                    binding.signupEmailEt.error = "Enter Unique Username"
+                    binding.signupUsernameEt.error = "Enter Unique Username"
                     Toast.makeText(this, "Enter Unique username", Toast.LENGTH_SHORT).show()
                 }
             }

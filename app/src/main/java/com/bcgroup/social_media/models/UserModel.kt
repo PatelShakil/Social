@@ -1,4 +1,4 @@
-package com.bcgroup.account
+package com.bcgroup.social_media.models
 
 class UserModel {
     lateinit var username: String

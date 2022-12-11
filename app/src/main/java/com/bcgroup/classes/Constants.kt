@@ -1,4 +1,4 @@
-package com.bcgroup.account
+package com.bcgroup.classes
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

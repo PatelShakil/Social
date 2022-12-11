@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleSocialPostProfileBinding
 import com.bcgroup.social_media.fragments.PostViewFragment
 import com.bcgroup.social_media.models.PostModel

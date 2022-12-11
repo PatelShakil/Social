@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import java.util.*
 
 class EditProfileFragment : Fragment() {

@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.*
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleSocialPostBinding
 import com.bcgroup.social_media.fragments.ViewUserProfileFragment
 import com.bcgroup.social_media.models.PostModel

@@ -12,7 +12,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.FragmentUsersBinding
 import com.bcgroup.social_media.adapters.ActiveUsersAdapter
 import com.bcgroup.social_media.adapters.RecentConversionAdapter

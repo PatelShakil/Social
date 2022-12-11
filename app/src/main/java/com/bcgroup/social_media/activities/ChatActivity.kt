@@ -1,4 +1,4 @@
-package com.bcgroup.social_media
+package com.bcgroup.social_media.activities
 
 import android.os.Bundle
 import android.view.View
@@ -13,7 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.bcgroup.R
-import com.bcgroup.account.Constants
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ActivityChatBinding
 import com.bcgroup.social_media.adapters.ChatAdapter
 import com.bcgroup.social_media.fragments.ViewUserProfileFragment
@@ -151,7 +151,7 @@ class ChatActivity : BaseActivity()  {
     }
     private fun updateConversion(message:String){
         var df = db.collection(Constants().KEY_COLLECTION_CONVERSIONS).document(conversionid!!)
-                df.update(Constants().KEY_LASTMESSAGE,message,Constants().KEY_TIMESTAMP,Date())
+                  df.update(Constants().KEY_LASTMESSAGE,message,Constants().KEY_TIMESTAMP,Date())
 
     }
     private fun checkConversion(){

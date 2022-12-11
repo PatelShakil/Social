@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".account.AccountCreationActivity"
+    tools:context=".social_media.activities.AccountCreationActivity"
     android:gravity="center">
 <androidx.cardview.widget.CardView
     android:id="@+id/login_layout"
@@ -66,6 +66,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/enter_unique_username"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose different username"
+                    android:visibility="gone"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/tajawal_medium"
+                    android:id="@+id/signup_username_tv_helper"/>
                 <EditText
                     android:id="@+id/signup_email_et"
                     android:inputType="textEmailAddress"

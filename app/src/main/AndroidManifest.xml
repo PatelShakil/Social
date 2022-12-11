@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".account.FirebaseUtils"
+        android:name=".classes.FirebaseUtils"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,16 +16,16 @@
         android:theme="@style/Theme.Genie"
         tools:targetApi="31">
         <activity
-            android:name=".social_media.ChatActivity"
+            android:name=".social_media.activities.ChatActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".social_media.SocialMediaActivity"
+            android:name=".social_media.activities.SocialMediaActivity"
             android:exported="false"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name="com.bcgroup.account.AccountCreationActivity"
+            android:name="com.bcgroup.social_media.activities.AccountCreationActivity"
             android:exported="true">
 
             <intent-filter>

@@ -1,11 +1,11 @@
-package com.bcgroup.social_media
+package com.bcgroup.social_media.activities
 
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
+import com.bcgroup.classes.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.bcgroup.account.Constants
 
 open class BaseActivity : AppCompatActivity() {
     var dbbase = FirebaseFirestore.getInstance()

@@ -15,10 +15,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
-import com.bcgroup.account.Constants
-import com.bcgroup.account.UserModel
+import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleSocialUserBinding
-import com.bcgroup.social_media.ChatActivity
+import com.bcgroup.social_media.activities.ChatActivity
+import com.bcgroup.social_media.models.UserModel
 import java.util.*
 import kotlin.collections.ArrayList
 
