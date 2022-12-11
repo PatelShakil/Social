@@ -59,24 +59,21 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
                                 FirebaseFirestore.getInstance()
                                     .collection(Constants().KEY_COLLECTION_USERS)
                                     .document(snapshot.child("post_author").getValue().toString())
-                                    .addSnapshotListener { value, error ->
-                                        if (error != null)
-                                            return@addSnapshotListener
-                                        if (value != null) {
-                                            if (value.exists()) {
+                                    .get()
+                                    .addOnSuccessListener{
+                                            if (it.exists()) {
                                                 if (context != null) {
                                                     Glide.with(context)
                                                         .load(
-                                                            value.getString("profile_pic")
+                                                            it.getString("profile_pic")
                                                                 .toString()
                                                         )
                                                         .placeholder(R.drawable.profile_icon)
                                                         .into(binding.senderPostProfile)
                                                 }
                                                 binding.senderPostAuthor.text =
-                                                    value.getString("username").toString()
+                                                    it.getString("username").toString()
                                             }
-                                        }
                                     }
                             }
                         }
@@ -110,22 +107,19 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
                                 binding.receiverPostIv.setImageBitmap(Constants().decodeImage(postImg))
                                 FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
                                     .document(snapshot.child("post_author").getValue().toString())
-                                    .addSnapshotListener { value, error ->
-                                        if(error != null)
-                                            return@addSnapshotListener
-                                        if(value != null){
-                                            if (value.exists()){
+                                    .get()
+                                    .addOnSuccessListener {
+                                            if (it.exists()){
                                                 if (context != null){
                                                     Glide.with(context)
-                                                        .load(value.getString("profile_pic").toString())
+                                                        .load(it.getString("profile_pic").toString())
                                                         .placeholder(R.drawable.profile_icon)
                                                         .into(binding.receiverPostProfile)
                                                 }
-                                                binding.receiverPostAuthor.text = value.getString("username").toString()
+                                                binding.receiverPostAuthor.text = it.getString("username").toString()
                                             }
                                         }
                                     }
-                            }
                         }
                         override fun onCancelled(error: DatabaseError) {}
                     })

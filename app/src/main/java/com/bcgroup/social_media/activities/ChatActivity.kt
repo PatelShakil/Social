@@ -204,4 +204,9 @@ class ChatActivity : BaseActivity()  {
     fun readableDate(date:Date):String{
         return SimpleDateFormat("hh:mm a - MMM dd, yyyy",Locale.getDefault()).format(date)
     }
+
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
+    }
 }
