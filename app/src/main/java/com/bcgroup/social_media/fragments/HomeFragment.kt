@@ -173,7 +173,7 @@ class HomeFragment : Fragment() {
                                 }
                             }
                             if (users_list.size > 0) {
-                                var users_adapter = SendPostAdapter(users_list,requireContext(),post.post_id)
+                                var users_adapter = SendPostAdapter(users_list,requireContext(),post.post_id,"post")
                                 rv?.adapter = users_adapter
                                 users_adapter.notifyDataSetChanged()
                             }

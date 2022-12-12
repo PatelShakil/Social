@@ -24,6 +24,7 @@ class FirebaseService : FirebaseMessagingService() {
         Log.d("Msg", "recieved")
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("uid", message.data["uid"])
+        intent.putExtra("location","notification")
         val manager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = Random().nextInt()

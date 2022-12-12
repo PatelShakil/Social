@@ -233,7 +233,8 @@ class ChatActivity : BaseActivity()  {
 
     override fun onBackPressed() {
         finish()
-        startActivity(Intent(this,SocialMediaActivity::class.java))
+        if(intent.extras?.getString("location") == "chat")
+            startActivity(Intent(this,SocialMediaActivity::class.java))
         super.onBackPressed()
     }
 }

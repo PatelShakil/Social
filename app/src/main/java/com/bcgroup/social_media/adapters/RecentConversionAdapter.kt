@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleConversionUserBinding
 import com.bcgroup.social_media.activities.ChatActivity
 import com.bcgroup.social_media.models.ChatModel
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RecentConversionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>{
     var msglist:List<ChatModel>
@@ -29,10 +29,9 @@ class RecentConversionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>{
             var profile_pic:String
             FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
                 .document(con.conversionid)
-                .addSnapshotListener{value,error ->
-                    if(error != null)
-                        return@addSnapshotListener
-                    if (value != null){
+                .get()
+                .addOnSuccessListener {
+                var value = it
                         binding.username.text = value.getString(Constants().KEY_NAME)
                         Glide.with(binding.profile.context)
                             .load(value.getString("profile_pic"))
@@ -45,11 +44,11 @@ class RecentConversionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>{
                             bundle.putString("uid",con.conversionid)
                             bundle.putString("profile_pic",profile_pic)
                             intent.putExtras(bundle)
+                            intent.putExtra("location","usersList")
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             binding.socialUser.context.startActivity(intent)
                         }
                     }
-                }
             binding.lastMsg.text = con.message
             binding.msgTime.text = ChatActivity().readableDate(con.date)
 
@@ -57,8 +56,10 @@ class RecentConversionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return RecentConViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.sample_conversion_user,parent,false))
+        return RecentConversionAdapter.RecentConViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.sample_conversion_user, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

@@ -2,18 +2,18 @@ package com.bcgroup.social_media.activities
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ActivityAccountCreationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
 
 class AccountCreationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountCreationBinding
@@ -32,17 +32,19 @@ class AccountCreationActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         db = FirebaseFirestore.getInstance()
         try{
-            if (intent.action == Intent.ACTION_SEND && intent.type == Intent.EXTRA_TEXT){
-                var msg = intent.getStringExtra(Intent.EXTRA_TEXT)
-                Toast.makeText(this,msg.toString(),Toast.LENGTH_SHORT).show()
+            if(intent.action == Intent.ACTION_SEND) {
+                var i = Intent(this, SocialMediaActivity::class.java)
+                i.putExtra("l", "l")
+                i.putExtra("link", intent.getStringExtra(Intent.EXTRA_TEXT))
+                startActivity(i)
+            }else if(auth.uid.toString() == auth.currentUser?.uid){
+                startActivity(Intent(this, SocialMediaActivity::class.java))
             }
         }catch(e :Exception){
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
 
-        if(auth.uid.toString() == auth.currentUser?.uid){
-            startActivity(Intent(this, SocialMediaActivity::class.java))
-        }
+
         binding.loginAlreadyLoginTv.setOnClickListener {
             binding.loginLayout.visibility = View.GONE
             binding.signupLayout.visibility = View.VISIBLE

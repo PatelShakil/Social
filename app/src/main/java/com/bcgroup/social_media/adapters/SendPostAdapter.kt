@@ -24,11 +24,13 @@ class SendPostAdapter : RecyclerView.Adapter<SendPostAdapter.SendPostViewHolder>
     var usersList : ArrayList<UserModel>
     var context : Context
     var postId : String
+    var check : String
 
-    constructor(usersList: ArrayList<UserModel>, context: Context,postId : String) : super() {
+    constructor(usersList: ArrayList<UserModel>, context: Context,postId : String,check : String) : super() {
         this.usersList = usersList
         this.context = context
         this.postId = postId
+        this.check = check
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SendPostViewHolder {
@@ -36,7 +38,7 @@ class SendPostAdapter : RecyclerView.Adapter<SendPostAdapter.SendPostViewHolder>
     }
 
     override fun onBindViewHolder(holder: SendPostViewHolder, position: Int) {
-        holder.setData(usersList[position],postId)
+        holder.setData(usersList[position],postId,check)
     }
 
     override fun getItemCount(): Int {
@@ -50,10 +52,12 @@ class SendPostAdapter : RecyclerView.Adapter<SendPostAdapter.SendPostViewHolder>
         lateinit var model : UserModel
         lateinit var postId: String
         lateinit var senderName :String
+        lateinit var c:String
         var check = false
-        fun setData(model: UserModel,postId: String){
+        fun setData(model: UserModel,postId: String,c: String){
             this.model = model
             this.postId = postId
+            this.c = c
             if (binding.socialUser.context != null){
                 Glide.with(binding.socialUser.context)
                     .load(model.profile_pic)
@@ -80,13 +84,23 @@ class SendPostAdapter : RecyclerView.Adapter<SendPostAdapter.SendPostViewHolder>
             var map :HashMap<String,Any> = HashMap()
             map.put(Constants().KEY_SENDER_ID,FirebaseAuth.getInstance().uid.toString())
             map.put(Constants().KEY_RECEIVER_ID,model.uid)
-            map.put(Constants().KEY_MESSAGE,"false")
-            map.put("post",postId)
+            var msg = ""
+            if(c == "link") {
+                map.put(Constants().KEY_MESSAGE, postId)
+                msg = "Shared link"
+
+            }
+            else {
+                map.put(Constants().KEY_MESSAGE,"false")
+                map.put("post", postId)
+                msg = "Shared post"
+            }
             map.put(Constants().KEY_TIMESTAMP, Date())
+
             FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_CHAT).add(map)
             this.check = true
             binding.followBtnSocialUser.visibility = View.GONE
-            sendNotification(PushNotification(NotificationData(senderName,"Shared post",FirebaseAuth.getInstance().uid.toString()),model.token))
+            sendNotification(PushNotification(NotificationData(senderName,msg,FirebaseAuth.getInstance().uid.toString()),model.token))
         }
         private fun sendNotification(notification: PushNotification) {
             ApiUtils.client.sendNotification(notification)
