@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="com.google.android.c2dm.permission.Reciever" />
     <application
         android:name=".classes.FirebaseUtils"
         android:allowBackup="true"
@@ -48,6 +48,15 @@
                 <data android:mimeType="video/*"/>
             </intent-filter>
         </activity>
+        <service
+            android:name=".notification.FirebaseService"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.Send">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.permission.Recieve" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="preloaded_fonts"

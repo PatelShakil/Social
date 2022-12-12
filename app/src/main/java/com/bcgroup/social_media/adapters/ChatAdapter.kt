@@ -5,17 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ReceiverSampleMessageBinding
 import com.bcgroup.databinding.SenderSampleMessageBinding
 import com.bcgroup.social_media.models.ChatModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
     var msglist:List<ChatModel>
@@ -55,25 +56,44 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
                                 var postImg = snapshot.child("post_url").getValue().toString()
-                                binding.senderPostIv.setImageBitmap(Constants().decodeImage(postImg))
+                                if (postImg.contains("https://")) {
+                                    binding.senderPostIv.visibility = View.GONE
+                                    binding.senderReelIv.visibility = View.VISIBLE
+                                    val requestOptions = RequestOptions()
+                                    requestOptions.isMemoryCacheable
+                                    Glide.with(context!!).setDefaultRequestOptions(requestOptions)
+                                        .load(postImg)
+                                        .placeholder(R.drawable.video_file_icon)
+                                        .into(binding.senderReelIv)
+
+                                } else {
+                                    binding.senderReelIv.visibility = View.GONE
+                                    binding.senderPostIv.setImageBitmap(
+                                        Constants().decodeImage(
+                                            postImg
+                                        )
+                                    )
+                                }
                                 FirebaseFirestore.getInstance()
                                     .collection(Constants().KEY_COLLECTION_USERS)
-                                    .document(snapshot.child("post_author").getValue().toString())
+                                    .document(
+                                        snapshot.child("post_author").getValue().toString()
+                                    )
                                     .get()
-                                    .addOnSuccessListener{
-                                            if (it.exists()) {
-                                                if (context != null) {
-                                                    Glide.with(context)
-                                                        .load(
-                                                            it.getString("profile_pic")
-                                                                .toString()
-                                                        )
-                                                        .placeholder(R.drawable.profile_icon)
-                                                        .into(binding.senderPostProfile)
-                                                }
-                                                binding.senderPostAuthor.text =
-                                                    it.getString("username").toString()
+                                    .addOnSuccessListener {
+                                        if (it.exists()) {
+                                            if (context != null) {
+                                                Glide.with(context)
+                                                    .load(
+                                                        it.getString("profile_pic")
+                                                            .toString()
+                                                    )
+                                                    .placeholder(R.drawable.profile_icon)
+                                                    .into(binding.senderPostProfile)
                                             }
+                                            binding.senderPostAuthor.text =
+                                                it.getString("username").toString()
+                                        }
                                     }
                             }
                         }
@@ -102,24 +122,48 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
                     .child(msg.post)
                     .addListenerForSingleValueEvent(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.exists()){
+                            if (snapshot.exists()) {
                                 var postImg = snapshot.child("post_url").getValue().toString()
-                                binding.receiverPostIv.setImageBitmap(Constants().decodeImage(postImg))
-                                FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
-                                    .document(snapshot.child("post_author").getValue().toString())
+                                if (postImg.contains("https://")) {
+                                    binding.receiverPostIv.visibility = View.GONE
+                                    binding.receiverReelIv.visibility = View.VISIBLE
+                                    val requestOptions = RequestOptions()
+                                    requestOptions.isMemoryCacheable
+                                    Glide.with(context!!).setDefaultRequestOptions(requestOptions)
+                                        .load(postImg)
+                                        .placeholder(R.drawable.video_file_icon)
+                                        .into(binding.receiverReelIv)
+
+                                } else {
+                                    binding.receiverReelIv.visibility = View.GONE
+                                    binding.receiverPostIv.visibility = View.VISIBLE
+                                    binding.receiverPostIv.setImageBitmap(
+                                        Constants().decodeImage(
+                                            postImg
+                                        )
+                                    )
+                                }
+                                FirebaseFirestore.getInstance()
+                                    .collection(Constants().KEY_COLLECTION_USERS)
+                                    .document(
+                                        snapshot.child("post_author").getValue().toString()
+                                    )
                                     .get()
                                     .addOnSuccessListener {
-                                            if (it.exists()){
-                                                if (context != null){
-                                                    Glide.with(context)
-                                                        .load(it.getString("profile_pic").toString())
-                                                        .placeholder(R.drawable.profile_icon)
-                                                        .into(binding.receiverPostProfile)
-                                                }
-                                                binding.receiverPostAuthor.text = it.getString("username").toString()
+                                        if (it.exists()) {
+                                            if (context != null) {
+                                                Glide.with(context)
+                                                    .load(
+                                                        it.getString("profile_pic").toString()
+                                                    )
+                                                    .placeholder(R.drawable.profile_icon)
+                                                    .into(binding.receiverPostProfile)
                                             }
+                                            binding.receiverPostAuthor.text =
+                                                it.getString("username").toString()
                                         }
                                     }
+                            }
                         }
                         override fun onCancelled(error: DatabaseError) {}
                     })

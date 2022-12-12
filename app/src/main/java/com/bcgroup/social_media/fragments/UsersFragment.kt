@@ -6,19 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.FragmentUsersBinding
 import com.bcgroup.social_media.adapters.ActiveUsersAdapter
 import com.bcgroup.social_media.adapters.RecentConversionAdapter
 import com.bcgroup.social_media.models.ChatModel
-import java.util.*
-import kotlin.collections.ArrayList
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class UsersFragment : Fragment() {
     lateinit var binding:FragmentUsersBinding
@@ -154,5 +152,10 @@ class UsersFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activeUsersFetcher()
+    }
+
+    override fun onPause() {
+        onDestroy()
+        super.onPause()
     }
 }

@@ -7,6 +7,7 @@ class UserModel {
     lateinit var name:String
     lateinit var profile_pic:String
     lateinit var uid:String
+    lateinit var token :String
     lateinit var following:ArrayList<Follower>
     lateinit var followers:ArrayList<Follower>
     constructor()

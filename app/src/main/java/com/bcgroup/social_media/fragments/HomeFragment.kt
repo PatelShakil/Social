@@ -168,6 +168,7 @@ class HomeFragment : Fragment() {
                                 for (i in it.documents) {
                                     var user: UserModel = i.toObject(UserModel::class.java)!!
                                     user.profile_pic = i["profile_pic"].toString()
+                                    user.token = i["token"].toString()
                                     users_list.add(user)
                                 }
                             }

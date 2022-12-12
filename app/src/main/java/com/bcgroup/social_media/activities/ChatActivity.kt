@@ -1,8 +1,19 @@
 package com.bcgroup.social_media.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
+import com.bcgroup.R
+import com.bcgroup.classes.Constants
+import com.bcgroup.databinding.ActivityChatBinding
+import com.bcgroup.notification.ApiUtils
+import com.bcgroup.notification.NotificationData
+import com.bcgroup.notification.PushNotification
+import com.bcgroup.social_media.adapters.ChatAdapter
+import com.bcgroup.social_media.fragments.ViewUserProfileFragment
+import com.bcgroup.social_media.models.ChatModel
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -12,16 +23,10 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import com.bcgroup.R
-import com.bcgroup.classes.Constants
-import com.bcgroup.databinding.ActivityChatBinding
-import com.bcgroup.social_media.adapters.ChatAdapter
-import com.bcgroup.social_media.fragments.ViewUserProfileFragment
-import com.bcgroup.social_media.models.ChatModel
+import retrofit2.Call
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class ChatActivity : BaseActivity()  {
@@ -38,6 +43,7 @@ class ChatActivity : BaseActivity()  {
     var simage = ""
     var rname = ""
     var rimage = ""
+    var rtoken = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -78,6 +84,7 @@ class ChatActivity : BaseActivity()  {
                             .into(binding.receiverProfile)
                         rname = value["name"].toString()
                         rimage = value["profile_pic"].toString()
+                        rtoken = value["token"].toString()
                         if (Integer.parseInt(value["status"].toString()) == 1) {
                             binding.userStatus.visibility = View.VISIBLE
                             var anim = AnimationUtils.loadAnimation(this, R.anim.slide_down_anim)
@@ -199,14 +206,34 @@ class ChatActivity : BaseActivity()  {
             conversion.put(Constants().KEY_TIMESTAMP,Date())
             addConversion(conversion)
         }
+        var notification = PushNotification(NotificationData(sname,binding.msgTextEt.text.trim().toString(),auth.uid.toString()),rtoken)
+        sendNotification(notification)
         binding.msgTextEt.text = null
     }
+
+    private fun sendNotification(notification: PushNotification) {
+        ApiUtils.client.sendNotification(notification)
+            ?.enqueue(object : retrofit2.Callback<PushNotification?> {
+                override fun onResponse(
+                    call: Call<PushNotification?>,
+                    response: Response<PushNotification?>
+                ) {
+                }
+
+                override fun onFailure(call: Call<PushNotification?>, t: Throwable) {
+                    Toast.makeText(this@ChatActivity, t.message, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+    }
+
     fun readableDate(date:Date):String{
         return SimpleDateFormat("hh:mm a - MMM dd, yyyy",Locale.getDefault()).format(date)
     }
 
     override fun onBackPressed() {
         finish()
+        startActivity(Intent(this,SocialMediaActivity::class.java))
         super.onBackPressed()
     }
 }
