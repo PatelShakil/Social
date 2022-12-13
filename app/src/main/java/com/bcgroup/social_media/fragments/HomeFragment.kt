@@ -15,16 +15,6 @@ import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FirebaseFirestore
 import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.FragmentHomeBinding
@@ -32,9 +22,18 @@ import com.bcgroup.social_media.adapters.PostAdapter
 import com.bcgroup.social_media.adapters.SendPostAdapter
 import com.bcgroup.social_media.models.PostModel
 import com.bcgroup.social_media.models.UserModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
@@ -210,7 +209,26 @@ class HomeFragment : Fragment() {
                             }catch (e : Exception){}
                         }
                     }
-                holder.binding.postLikeCount.text = post.post_like.toString()
+                database.reference.child("social_media")
+                    .child("posts")
+                    .child(post.post_id)
+                    .child("likes")
+                    .addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(snapshot.exists()){
+                                var a = 0
+                                for (i in snapshot.children){
+                                    a++
+                                }
+                                holder.binding.postLikeCount.text = a.toString()
+                            }else
+                                holder.binding.postLikeCount.text = "0"
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+                    })
                 database.reference.child("social_media")
                     .child("posts")
                     .child(post.post_id)

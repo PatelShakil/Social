@@ -1,21 +1,25 @@
 package com.bcgroup.social_media.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bcgroup.R
-import com.bcgroup.databinding.FragmentProfileBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.bcgroup.classes.Constants
+import com.bcgroup.databinding.FragmentProfileBinding
 import com.bcgroup.databinding.SampleSocialPostProfileBinding
 import com.bcgroup.social_media.adapters.ProfileTabAdapter
+import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileFragment : Fragment() {
     lateinit var binding:FragmentProfileBinding
@@ -38,7 +42,7 @@ class ProfileFragment : Fragment() {
                     .addOnSuccessListener {
                         if (it.exists()){
                             binding.userMyProfileUserName.text = it["name"].toString()
-                            Glide.with(binding.userMyProfilePic.context)
+                            Glide.with(binding.userMyProfilePic.context.applicationContext)
                                 .load(it["profile_pic"].toString())
                                 .placeholder(R.drawable.profile_icon)
                                 .into(binding.userMyProfilePic)
@@ -102,11 +106,18 @@ class ProfileFragment : Fragment() {
                 }
 
             })
-        binding.profileTab.setupWithViewPager(binding.profileViewpager)
-        var pager_adapter = ProfileTabAdapter(childFragmentManager)
-        pager_adapter.addFragment(PostFragment(),"post")
-        pager_adapter.addFragment(SavedFragment(),"saved")
+        var pager_adapter = ProfileTabAdapter(childFragmentManager,lifecycle)
         binding.profileViewpager.adapter = pager_adapter
+        TabLayoutMediator(binding.profileTab,binding.profileViewpager){tab,position->
+            when(position){
+                0->{
+                    tab.text = "post"
+                }
+                1->{
+                    tab.text = "saved"
+                }
+            }
+        }.attach()
         return binding.root
     }
     class ProfilePostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

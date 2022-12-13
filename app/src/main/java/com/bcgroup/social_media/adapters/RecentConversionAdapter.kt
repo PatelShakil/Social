@@ -33,7 +33,7 @@ class RecentConversionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 .addOnSuccessListener {
                 var value = it
                         binding.username.text = value.getString(Constants().KEY_NAME)
-                        Glide.with(binding.profile.context)
+                        Glide.with(binding.profile.context.applicationContext)
                             .load(value.getString("profile_pic"))
                             .placeholder(R.drawable.profile_icon)
                             .into(binding.profile)

@@ -1,6 +1,7 @@
 package com.bcgroup.social_media.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ReceiverSampleMessageBinding
 import com.bcgroup.databinding.SenderSampleMessageBinding
+import com.bcgroup.social_media.activities.SocialMediaActivity
 import com.bcgroup.social_media.models.ChatModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -45,9 +47,16 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
             binding = SenderSampleMessageBinding.bind(itemView)
         }
         fun setData(msg:ChatModel,context : Context) {
+
             if (msg.message == "false") {
                 binding.senderTv.visibility = View.GONE
                 binding.senderPostCard.visibility = View.VISIBLE
+                binding.senderPostCard.setOnClickListener {
+                    var i = Intent(context,SocialMediaActivity::class.java)
+                    i.putExtra("location","post")
+                    i.putExtra("post_id",msg.post)
+                    context.startActivity(i)
+                }
                 FirebaseDatabase.getInstance().reference
                     .child("social_media")
                     .child("posts")
@@ -100,10 +109,9 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                         override fun onCancelled(error: DatabaseError) {}
                     })
-                binding.sendMessageDatetime.text = msg.datetime
             } else
                 binding.senderTv.text = msg.message
-
+            binding.sendMessageDatetime.text = msg.datetime
         }
 
     }
@@ -116,6 +124,12 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
             if (msg.message == "false"){
                 binding.receiverTv.visibility = View.GONE
                 binding.receiverPostCard.visibility = View.VISIBLE
+                binding.receiverPostCard.setOnClickListener {
+                    var i = Intent(context,SocialMediaActivity::class.java)
+                    i.putExtra("location","post")
+                    i.putExtra("post_id",msg.post)
+                    context.startActivity(i)
+                }
                 FirebaseDatabase.getInstance().reference
                     .child("social_media")
                     .child("posts")
@@ -167,10 +181,10 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         }
                         override fun onCancelled(error: DatabaseError) {}
                     })
-                binding.receiveMessageDatetime.text = msg.datetime
             }else
                 binding.receiverTv.text = msg.message
-        FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
+            binding.receiveMessageDatetime.text = msg.datetime
+            FirebaseFirestore.getInstance().collection(Constants().KEY_COLLECTION_USERS)
                 .document(msg.senderid)
                 .get()
                 .addOnSuccessListener {

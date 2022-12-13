@@ -1,11 +1,14 @@
 package com.bcgroup.social_media.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.bcgroup.R
+import com.bcgroup.classes.Constants
+import com.bcgroup.databinding.FragmentPostBinding
+import com.bcgroup.social_media.models.PostModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -13,10 +16,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
-import com.bcgroup.R
-import com.bcgroup.classes.Constants
-import com.bcgroup.databinding.FragmentPostBinding
-import com.bcgroup.social_media.models.PostModel
 
 class PostFragment : Fragment() {
     lateinit var binding : FragmentPostBinding
@@ -56,12 +55,12 @@ class PostFragment : Fragment() {
 //                    holder.binding.postUploaded.visibility = View.VISIBLE
 //                   holder.binding.postUploaded.setImageBitmap(Constants().decodeImage(model.post_url))
                 holder.binding.postUploaded.setOnClickListener {
-                    Toast.makeText(context,"oops... This feature currently disable", Toast.LENGTH_SHORT).show()
-//                       var fg = PostViewFragment()
-//                       var bundle = Bundle()
-//                       bundle.putString("post_url",post.post_url)
-//                       fg.arguments = bundle
-//                       parentFragmentManager.beginTransaction().replace(R.id.main_container,fg,"post_view").addToBackStack("post_view").commit()
+//                    Toast.makeText(context,"oops... This feature currently disable", Toast.LENGTH_SHORT).show()
+                       var fg = PostViewFragment()
+                       var bundle = Bundle()
+                       bundle.putString("post_id",post.post_id)
+                       fg.arguments = bundle
+                    requireParentFragment().parentFragmentManager.beginTransaction().replace(R.id.main_container,fg,"post_view").addToBackStack("post_view").commit()
                 }
             }
         }

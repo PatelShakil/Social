@@ -5,9 +5,9 @@
         android:id="@+id/social_media_search"
         android:icon="@drawable/search_icon"/>
     <item
-    android:title="Home"
-    android:id="@+id/social_media_home"
-    android:icon="@drawable/home_icon"/>
+        android:title="Home"
+        android:id="@+id/social_media_home"
+        android:icon="@drawable/home_icon"/>
     <item
         android:title="Chats"
         android:id="@+id/social_media_chats"

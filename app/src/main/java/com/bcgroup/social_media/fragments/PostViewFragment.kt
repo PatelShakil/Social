@@ -1,17 +1,17 @@
 package com.bcgroup.social_media.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.bcgroup.databinding.FragmentPostViewBinding
 import com.bcgroup.social_media.adapters.PostAdapter
+import com.bcgroup.social_media.models.PostModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.bcgroup.social_media.models.PostModel
 
 class PostViewFragment : Fragment() {
     lateinit var binding:FragmentPostViewBinding
@@ -24,7 +24,7 @@ class PostViewFragment : Fragment() {
         var bundle = this.arguments
         if (bundle!=null){
             var post_list = ArrayList<PostModel>()
-            post_adapter = PostAdapter(context?.applicationContext!!,post_list,parentFragmentManager)
+            post_adapter = PostAdapter(requireContext(),post_list,parentFragmentManager)
             binding.postRv.adapter = post_adapter
             FirebaseDatabase.getInstance().reference
                 .child("social_media")

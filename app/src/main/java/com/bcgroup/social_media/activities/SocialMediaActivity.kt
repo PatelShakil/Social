@@ -7,11 +7,9 @@ import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.ActivitySocialMediaBinding
 import com.bcgroup.social_media.adapters.SendPostAdapter
-import com.bcgroup.social_media.fragments.HomeFragment
-import com.bcgroup.social_media.fragments.ProfileFragment
-import com.bcgroup.social_media.fragments.SearchFragment
-import com.bcgroup.social_media.fragments.UsersFragment
+import com.bcgroup.social_media.fragments.*
 import com.bcgroup.social_media.models.UserModel
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,8 +20,22 @@ class SocialMediaActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySocialMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(binding.socialToolbar)
+        dbbase.collection(Constants().KEY_COLLECTION_USERS)
+            .document(FirebaseAuth.getInstance().uid.toString())
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()){
+                    binding.curUserUsername.text = it.getString("username")
+                    binding.curUserName.text = it.getString("name")
+                    Glide.with(applicationContext)
+                        .load(it.getString("profile_pic"))
+                        .placeholder(R.drawable.logoround)
+                        .into(binding.curUserProfileIv)
+                }
+            }
         binding.navigation.selectedItemId = R.id.social_media_home
+        supportFragmentManager.beginTransaction().replace(R.id.main_container,HomeFragment(),"home").addToBackStack("home").commit()
         if (intent.extras?.getString("l") == "l"){
             var link = intent.extras?.getString("link")
             var sheet : BottomSheetDialog
@@ -52,7 +64,21 @@ class SocialMediaActivity : BaseActivity() {
                 }
             sheet.show()
         }
-        supportFragmentManager.beginTransaction().replace(R.id.main_container,HomeFragment(),"home").addToBackStack("home").commit()
+        else if (intent.extras?.getString("location") == "chat"){
+            var fragment = ViewUserProfileFragment()
+            var bundle = Bundle()
+            bundle.putString("uid",intent.extras?.getString("uid"))
+            fragment.arguments = bundle
+//                    (BottomNavigationView(context?.applicationContext!!)).findViewById<BottomNavigationView>(R.id.navigation).visibility = View.GONE
+            supportFragmentManager.beginTransaction().replace(R.id.main_container,fragment).addToBackStack("view_user").commit()
+        }else if (intent.extras?.getString("location") == "post"){
+            var fg = PostViewFragment()
+            var bundle = Bundle()
+            bundle.putString("post_id",intent.extras?.getString("post_id"))
+            fg.arguments = bundle
+//                    (BottomNavigationView(context?.applicationContext!!)).findViewById<BottomNavigationView>(R.id.navigation).visibility = View.GONE
+            supportFragmentManager.beginTransaction().replace(R.id.main_container,fg).addToBackStack("view_user").commit()
+        }
         binding.navigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.social_media_search -> {
@@ -122,11 +148,6 @@ class SocialMediaActivity : BaseActivity() {
 //        else if (supportFragmentManager.findFragmentByTag("search")?.isVisible!!){
 //            binding.navigation.selectedItemId = R.id.social_media_search
 //        }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     override fun onBackPressed() {

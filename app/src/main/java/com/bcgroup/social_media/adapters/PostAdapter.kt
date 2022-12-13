@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentManager
@@ -14,19 +15,21 @@ import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.*
 import com.bcgroup.R
 import com.bcgroup.classes.Constants
 import com.bcgroup.databinding.SampleSocialPostBinding
 import com.bcgroup.social_media.fragments.ViewUserProfileFragment
 import com.bcgroup.social_media.models.PostModel
+import com.bcgroup.social_media.models.UserModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 
@@ -78,6 +81,33 @@ class PostAdapter:RecyclerView.Adapter<PostAdapter.PostViewHolder> {
         var post_author_name = ""
         var curren_user_name = ""
         holder.binding.userPostCaption.text = post.post_caption
+        holder.binding.postShare.setOnClickListener {
+            var sheet : BottomSheetDialog
+            sheet = BottomSheetDialog(context)
+            sheet.setContentView(R.layout.send_layout)
+            var rv = sheet.findViewById<RecyclerView>(R.id.send_users_rv)
+            sheet.findViewById<TextView>(R.id.send_post_caption)?.text = post.post_caption
+            var users_list = ArrayList<UserModel>()
+            db.collection(Constants().KEY_COLLECTION_USERS)
+                .whereNotEqualTo("uid", auth.uid.toString())
+                .get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        for (i in it.documents) {
+                            var user: UserModel = i.toObject(UserModel::class.java)!!
+                            user.profile_pic = i["profile_pic"].toString()
+                            user.token = i["token"].toString()
+                            users_list.add(user)
+                        }
+                    }
+                    if (users_list.size > 0) {
+                        var users_adapter = SendPostAdapter(users_list,holder.binding.postShare.context.applicationContext,post.post_id,"post")
+                        rv?.adapter = users_adapter
+                        users_adapter.notifyDataSetChanged()
+                    }
+                }
+            sheet.show()
+        }
         if (post.post_url.contains("https://")) {
             try {
                 holder.binding.userPostVid.setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)

@@ -12,7 +12,6 @@ import com.bcgroup.notification.ApiUtils
 import com.bcgroup.notification.NotificationData
 import com.bcgroup.notification.PushNotification
 import com.bcgroup.social_media.adapters.ChatAdapter
-import com.bcgroup.social_media.fragments.ViewUserProfileFragment
 import com.bcgroup.social_media.models.ChatModel
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
@@ -57,11 +56,10 @@ class ChatActivity : BaseActivity()  {
         receiverid = intent.extras?.getString("uid").toString()
         senderInfo()
         binding.receiverProfile.setOnClickListener {
-            var fragment = ViewUserProfileFragment()
-            var bundle = Bundle()
-            bundle.putString("uid",receiverid)
-            fragment.arguments = bundle
-            supportFragmentManager.beginTransaction().replace(R.id.chat_container,fragment,"view_user").addToBackStack("view_user").commit()
+          var intent = Intent(this,SocialMediaActivity::class.java)
+                        intent.putExtra("uid",receiverid)
+                        intent.putExtra("location","chat")
+                        startActivity(intent)
         }
         binding.msgSendBtn.setOnClickListener {
             if (binding.msgTextEt.text?.trim().toString().isNotEmpty())
