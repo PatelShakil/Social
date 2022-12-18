@@ -3,6 +3,7 @@ package com.bcgroup.social_media.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -167,8 +168,18 @@ class AccountCreationActivity : AppCompatActivity() {
             }
 
     }
+    private fun speak(string: String,tts:TextToSpeech) {
+        tts.speak(string,TextToSpeech.QUEUE_FLUSH,null,"")
+    }
 
     override fun onStart() {
+        var tts : TextToSpeech? = null
+        tts = TextToSpeech(this) {
+            if (it == TextToSpeech.SUCCESS){
+                tts!!.setSpeechRate(1.2F)
+                speak("Assalamu Alaikum, I am Assistant of you. How can I help you ?",tts!!)
+            }
+        }
         super.onStart()
         gettoken()
     }

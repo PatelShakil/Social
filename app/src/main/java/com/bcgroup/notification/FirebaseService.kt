@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
@@ -24,7 +25,7 @@ class FirebaseService : FirebaseMessagingService() {
         Log.d("Msg", "recieved")
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("uid", message.data["uid"])
-        intent.putExtra("location","notification")
+        intent.putExtra("location","chat")
         val manager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = Random().nextInt()
@@ -55,6 +56,7 @@ class FirebaseService : FirebaseMessagingService() {
                 .setContentText(message.getData().get("message"))
                 .setSmallIcon(R.drawable.logo)
                 .setAutoCancel(true)
+                .setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.logoround))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(intent1)
                 .build()
@@ -68,7 +70,7 @@ class FirebaseService : FirebaseMessagingService() {
             CHANNEL_ID,"${R.string.app_name}",
             NotificationManager.IMPORTANCE_HIGH
         )
-        channel.setDescription("We notified you or each and every event.")
+        channel.setDescription("We notified you about each and every moment.")
         channel.enableLights(true)
         channel.setLightColor(Color.GREEN)
         channel.enableVibration(true)

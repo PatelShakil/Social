@@ -92,7 +92,7 @@ class ChatAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>{
                                     .addOnSuccessListener {
                                         if (it.exists()) {
                                             if (context != null) {
-                                                Glide.with(context)
+                                                Glide.with(context.applicationContext)
                                                     .load(
                                                         it.getString("profile_pic")
                                                             .toString()

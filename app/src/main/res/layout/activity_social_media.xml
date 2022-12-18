@@ -5,40 +5,44 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     tools:context=".social_media.activities.SocialMediaActivity">
+
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/social_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-20dp"
         android:background="@color/primary"
-        android:id="@+id/social_toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="-20dp">
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/cur_user_profile_iv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="10dp"
                 android:layout_marginVertical="2dp"
+                android:layout_marginStart="10dp"
                 android:src="@drawable/profile_icon"
-                android:id="@+id/cur_user_profile_iv"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_marginEnd="50dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/cur_user_name"
-                android:text="@string/app_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="50dp"
                 android:paddingStart="9dp"
+                android:text="@string/app_name"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toEndOf="@id/cur_user_profile_iv"
                 android:textSize="18sp"
-                app:layout_constraintTop_toTopOf="@id/cur_user_profile_iv"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cur_user_profile_iv"
+                app:layout_constraintTop_toTopOf="@id/cur_user_profile_iv" />
 
             <TextView
                 android:id="@+id/cur_user_username"
@@ -59,16 +63,30 @@
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="66dp"
+        android:paddingBottom="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/social_toolbar"
-        android:paddingBottom="50dp"/>
+        app:layout_constraintTop_toBottomOf="@id/social_toolbar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="50dp"
+        android:id="@+id/assistant"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/main_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="@color/white"
+        android:foreground="@drawable/mic_icon"
+        android:foregroundTint="@color/secondary"
+        android:layout_marginBottom="150dp"/>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/social_media_bottom_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

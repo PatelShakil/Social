@@ -179,7 +179,26 @@ class PostAdapter:RecyclerView.Adapter<PostAdapter.PostViewHolder> {
                         .into(holder.binding.currentUserProfile)
                 }
             }
-        holder.binding.postLikeCount.text = post.post_like.toString()
+        database.reference.child("social_media")
+            .child("posts")
+            .child(post.post_id)
+            .child("likes")
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()){
+                        var a = 0
+                        for (i in snapshot.children){
+                            a++
+                        }
+                        holder.binding.postLikeCount.text = a.toString()
+                    }else
+                        holder.binding.postLikeCount.text = "0"
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
         database.reference.child("social_media")
             .child("posts")
             .child(post.post_id)

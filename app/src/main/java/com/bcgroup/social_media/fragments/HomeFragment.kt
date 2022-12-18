@@ -56,10 +56,11 @@ class HomeFragment : Fragment() {
         database = FirebaseDatabase.getInstance()
         post_list = ArrayList()
         post_list.clear()
-        adapter = PostAdapter(context?.applicationContext!!,post_list,parentFragmentManager)
+        adapter = PostAdapter(requireContext(),post_list,parentFragmentManager)
         var anim = AnimationUtils.loadAnimation(binding.homeFragment.context,R.anim.slide_down_anim)
         binding.homeFragment.animation = anim
         binding.swipe.setOnRefreshListener {
+            post_list.shuffle()
             adapter.notifyDataSetChanged()
             binding.swipe.isRefreshing = false
         }
@@ -68,15 +69,18 @@ class HomeFragment : Fragment() {
             .addValueEventListener(object :ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     post_list.clear()
+                    var t = false
                     if (snapshot.exists()){
                         for (i in snapshot.children){
                             var post: PostModel? =i.getValue(PostModel::class.java)
-                            post?.post_id = i.key.toString()
                             if (post != null) {
-                                post_list.add(0,post)
+                                t = true
+                                post_list.add(post)
                             }
                         }
-                        adapter.notifyDataSetChanged()
+                        do {
+                            adapter.notifyDataSetChanged()
+                        }while (!t)
                     }
                 }
 
@@ -84,6 +88,8 @@ class HomeFragment : Fragment() {
                 }
 
             })
+        binding.feedPostRv.adapter = adapter
+        adapter.notifyDataSetChanged()
         val options: FirebaseRecyclerOptions<PostModel> = FirebaseRecyclerOptions.Builder<PostModel>()
             .setQuery(database.reference.child("social_media")
                 .child("posts"),PostModel::class.java)
@@ -245,6 +251,7 @@ class HomeFragment : Fragment() {
                         override fun onCancelled(error: DatabaseError) {}
 
                     })
+
                 holder.binding.postLikeBtn.setOnClickListener {
                     database.reference.child("social_media")
                         .child("posts")
@@ -354,7 +361,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        binding.feedPostRv.adapter = adapter_feed
+//        binding.feedPostRv.adapter = adapter_feed
         adapter_feed.startListening()
 
         return binding.root
@@ -369,6 +376,7 @@ class HomeFragment : Fragment() {
 //                ExoPlayerFactory.newSimpleInstance(this.context, trackSelector) as SimpleExoPlayer
 //
 //            val videoURI = Uri.parse(vurl)
+
 //
 //            val dataSourceFactory = DefaultHttpDataSourceFactory("exoplayer_video")
 //            val extractorsFactory: ExtractorsFactory = DefaultExtractorsFactory()
@@ -386,7 +394,7 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        adapter_feed.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
     override fun onResume() {
         super.onResume()

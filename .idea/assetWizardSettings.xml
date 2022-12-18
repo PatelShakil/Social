@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../BCA/SDK/icons/material/materialicons/pause_circle_outline/baseline_pause_circle_outline_24.xml" />
+                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../BCA/SDK/icons/material/materialicons/mic/baseline_mic_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="pause_circle_outline_icon" />
+                            <entry key="outputName" value="mic_icon" />
                             <entry key="sourceFile" value="G:\Start_up_Projects\Genie" />
                           </map>
                         </option>
